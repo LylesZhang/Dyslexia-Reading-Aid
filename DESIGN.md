@@ -39,12 +39,23 @@
 > 目标：将 demo 转化为可在任意网页运行的浏览器插件
 
 #### 1.1 插件脚手架
-- [ ] 创建 `manifest.json`（Manifest V3，声明 permissions: storage, activeTab, scripting, sidePanel）
-- [ ] 创建 `content/index.ts`（Content Script 入口，注入页面）
-- [ ] 创建 `background/index.ts`（Service Worker，管理消息路由）
-- [ ] 创建 `panel/panel.html` + `panel.ts`（Side Panel 设置界面）
-- [ ] 创建 `popup/popup.html` + `popup.ts`（Toolbar 弹窗，快速开关）
-- [ ] 配置构建工具（Vite 或 webpack + TypeScript）
+- [x] 创建 `manifest.json` — 插件的"身份证"，Chrome 通过它认识这个插件
+  - `manifest_version: 3` — Chrome 当前要求的格式版本，必须是 3
+  - `permissions` — 插件需要的权限：
+    - `storage` — 读写用户偏好设置
+    - `activeTab` — 访问当前用户正在看的标签页
+    - `scripting` — 向网页注入 JS/CSS 代码
+    - `sidePanel` — 开启右侧边栏
+  - `host_permissions: <all_urls>` — 允许在所有网页上运行
+  - `background.service_worker` — 后台 Service Worker 的入口文件路径
+  - `content_scripts` — 要自动注入到每个网页的 JS 和 CSS 文件
+  - `side_panel` — 侧边栏的 HTML 文件路径
+  - `action` — 点击 Chrome 工具栏插件图标时弹出的小窗口
+- [ ] 创建 `content/index.js`（Content Script 入口，注入页面）
+- [ ] 创建 `background/index.js`（Service Worker，管理消息路由）
+- [ ] 创建 `panel/panel.html` + `panel.js`（Side Panel 设置界面）
+- [ ] 创建 `popup/popup.html` + `popup.js`（Toolbar 弹窗，快速开关）
+- [ ] 创建 `icons/` 目录，放置 16px / 48px / 128px 三个尺寸的图标
 
 #### 1.2 DOM 正文提取
 - [ ] 引入 `@mozilla/readability` 提取页面正文（排除导航、广告、页脚）
