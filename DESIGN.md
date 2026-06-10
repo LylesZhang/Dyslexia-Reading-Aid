@@ -55,11 +55,13 @@
   - `findContentArea()` — 依次尝试 article / main 等选择器找正文
   - `processWord()` — 给单词加 Bionic Reading / Emotion / Logic 标记
   - `buildParagraphHTML()` — 把段落文本重建为带标记的 HTML
-  - `applyTransformations()` / `removeTransformations()` — 应用和撤销所有变换
+  - `applyTransformations()` — 排版样式直接设在每个 `<p>` 上（而非容器），避免被网页自身样式覆盖
+  - `removeTransformations()` — 撤销所有变换，逐段落清除内联样式并还原原始 HTML
   - `setupRuler()` / `updateRuler()` — Reading Ruler 跟随鼠标
   - `applyFocusMask()` / `clearFocusMask()` — Topic Focus 句子评分与半透明
   - `chrome.storage.sync.get` — 启动时读取已保存的用户偏好
   - `chrome.runtime.onMessage.addListener` — 监听 Side Panel 的实时设置变更
+  - **Bug 修复**：fontSize / lineHeight 必须设在每个段落元素上，设在父容器上会被子元素自身 CSS 规则覆盖
 - [x] 创建 `content/content.css` — 所有视觉效果的样式，前缀 `dra-` 防止与网页样式冲突
 - [x] 创建 `background/index.js` — 插件的"后端"，Phase 1 负责在 Side Panel 和 content script 之间转发消息
   - `chrome.runtime.onMessage.addListener` — 收到消息后判断来源（`sender.tab` 区分网页 vs 插件）

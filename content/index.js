@@ -22,7 +22,7 @@
 
   const EMOTION_WORDS = {
     positive: new Set([
-      'glowing', 'successful', 'bravely', 'determined', 'sincerely',
+      'Faculty', 'glowing', 'successful', 'bravely', 'determined', 'sincerely',
       'warm', 'comforting', 'proud', 'relief', 'smile', 'stronger'
     ]),
     negative: new Set([
@@ -163,22 +163,24 @@
     document.documentElement.style.setProperty('--dra-negative', settings.emotionNegativeColor);
     document.documentElement.style.setProperty('--dra-surprise', settings.emotionSurpriseColor);
 
-    // Typography overrides (only applied when a value is set)
-    if (settings.fontSize)      contentArea.style.fontSize     = settings.fontSize + 'px';
-    if (settings.lineHeight)    contentArea.style.lineHeight   = String(settings.lineHeight);
-    if (settings.fontFamily)    contentArea.style.fontFamily   = settings.fontFamily;
-    if (settings.wordSpacing)   contentArea.style.wordSpacing   = settings.wordSpacing + 'em';
-    if (settings.letterSpacing) contentArea.style.letterSpacing = settings.letterSpacing + 'em';
-
-    // Process each paragraph
+    // Process each paragraph — apply typography directly on each element
+    // (setting on contentArea alone doesn't work because child elements
+    // often have their own font-size/line-height rules that take precedence)
     contentArea.querySelectorAll('p, li, blockquote').forEach(para => {
       if (para.innerText.trim().length < 20) return;
 
-      // Save original HTML the first time we touch this element
-      if (!originalHTML.has(para)) originalHTML.set(para, para.innerHTML);
+      if (settings.fontSize)      para.style.fontSize     = settings.fontSize + 'px';
+      if (settings.lineHeight)    para.style.lineHeight   = String(settings.lineHeight);
+      if (settings.fontFamily)    para.style.fontFamily   = settings.fontFamily;
+      if (settings.wordSpacing)   para.style.wordSpacing   = settings.wordSpacing + 'em';
+      if (settings.letterSpacing) para.style.letterSpacing = settings.letterSpacing + 'em';
+      if (settings.fontColor)     para.style.color         = settings.fontColor;
 
+      if (!originalHTML.has(para)) originalHTML.set(para, para.innerHTML);
       para.innerHTML = buildParagraphHTML(para.innerText);
     });
+
+    if (settings.bgColor) contentArea.style.background = settings.bgColor;
   }
 
   function removeTransformations() {
@@ -186,11 +188,12 @@
 
     contentArea.querySelectorAll('p, li, blockquote').forEach(para => {
       if (originalHTML.has(para)) para.innerHTML = originalHTML.get(para);
+      ['fontSize', 'lineHeight', 'fontFamily', 'wordSpacing', 'letterSpacing', 'color'].forEach(prop => {
+        para.style[prop] = '';
+      });
     });
 
-    ['fontSize', 'lineHeight', 'fontFamily', 'wordSpacing', 'letterSpacing'].forEach(prop => {
-      contentArea.style[prop] = '';
-    });
+    contentArea.style.background = '';
   }
 
   // ── Reading Ruler ──────────────────────────────────────────────────────
