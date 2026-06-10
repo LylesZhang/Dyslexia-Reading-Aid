@@ -61,10 +61,20 @@
   - `chrome.storage.sync.get` — 启动时读取已保存的用户偏好
   - `chrome.runtime.onMessage.addListener` — 监听 Side Panel 的实时设置变更
 - [x] 创建 `content/content.css` — 所有视觉效果的样式，前缀 `dra-` 防止与网页样式冲突
-- [ ] 创建 `background/index.js`（Service Worker，管理消息路由）
-- [ ] 创建 `panel/panel.html` + `panel.js`（Side Panel 设置界面）
-- [ ] 创建 `popup/popup.html` + `popup.js`（Toolbar 弹窗，快速开关）
-- [ ] 创建 `icons/` 目录，放置 16px / 48px / 128px 三个尺寸的图标
+- [x] 创建 `background/index.js` — 插件的"后端"，Phase 1 负责在 Side Panel 和 content script 之间转发消息
+  - `chrome.runtime.onMessage.addListener` — 收到消息后判断来源（`sender.tab` 区分网页 vs 插件）
+  - `forwardToActiveTab()` — 用 `chrome.tabs.query` 找到当前活跃标签页，用 `chrome.tabs.sendMessage` 转发
+  - `chrome.sidePanel.setPanelBehavior` — 点击工具栏图标时自动打开 Side Panel
+- [x] 创建 `panel/panel.html` — Side Panel 界面结构：开关、滑块、颜色选择器
+- [x] 创建 `panel/panel.css` — Side Panel 样式，与 demo 左侧 sidebar 视觉一致
+- [x] 创建 `panel/panel.js` — Side Panel 逻辑
+  - `DEFAULT_SETTINGS` — 与 `content/index.js` 保持一致的默认值
+  - `broadcast(changed)` — 用户改动时同时做三件事：更新本地变量 / 存入 Chrome Storage / 发消息给 background
+  - `syncUI()` — 启动时把存储里的设置刷到所有界面控件上
+  - `init()` — 给所有控件绑定事件监听器
+  - 完整数据流：用户拨开关 → `broadcast()` → `background` 转发 → `content/index.js` 重新渲染
+- [ ] 创建 `popup/popup.html` + `popup.js`（暂时跳过，点击工具栏图标直接打开 Side Panel）
+- [x] 创建 `icons/` 目录 — 蓝底白色占位图标，三个尺寸：`icon16.png` / `icon48.png` / `icon128.png`
 
 #### 1.2 DOM 正文提取
 - [x] `findContentArea()` 已内置在 `content/index.js`，依次尝试常见选择器，兜底用 `document.body`

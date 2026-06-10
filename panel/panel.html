@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dyslexia Reading Aid</title>
+  <link rel="stylesheet" href="panel.css">
+</head>
+<body>
+
+  <div class="panel">
+
+    <div class="panel-header">
+      <span class="panel-title">Reading Aid</span>
+      <label class="master-switch">
+        <input type="checkbox" id="toggle-enabled">
+        <span class="track"></span>
+      </label>
+    </div>
+
+    <!-- Typography -->
+    <div class="section-label">Typography</div>
+
+    <div class="control-group">
+      <label class="control-label">Font</label>
+      <select id="font-family" class="font-select">
+        <option value="">System Default</option>
+        <option value="Georgia">Georgia</option>
+        <option value="Arial">Arial</option>
+        <option value="Verdana">Verdana</option>
+        <option value="OpenDyslexic, sans-serif">OpenDyslexic</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label">Font Size</label>
+      <div class="stepper">
+        <button id="font-size-dec" class="stepper-btn">−</button>
+        <span id="font-size-value" class="stepper-value">18px</span>
+        <button id="font-size-inc" class="stepper-btn">+</button>
+      </div>
+      <input type="range" id="font-size-slider" min="14" max="28" step="1" value="18" class="slider">
+    </div>
+
+    <div class="control-group">
+      <label class="control-label">Line Height</label>
+      <div class="stepper">
+        <button id="line-height-dec" class="stepper-btn">−</button>
+        <span id="line-height-value" class="stepper-value">1.8</span>
+        <button id="line-height-inc" class="stepper-btn">+</button>
+      </div>
+      <input type="range" id="line-height-slider" min="1.4" max="2.4" step="0.1" value="1.8" class="slider">
+    </div>
+
+    <div class="control-group">
+      <label class="control-label">Word Spacing</label>
+      <input type="range" id="word-spacing-slider" min="0" max="0.5" step="0.05" value="0" class="slider">
+      <span id="word-spacing-value" class="slider-value">0em</span>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label">Letter Spacing</label>
+      <input type="range" id="letter-spacing-slider" min="0" max="0.1" step="0.01" value="0" class="slider">
+      <span id="letter-spacing-value" class="slider-value">0em</span>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label">Text Color</label>
+      <input type="color" id="font-color" value="#2c2c2c" class="color-input">
+    </div>
+
+    <div class="control-group">
+      <label class="control-label">Background</label>
+      <input type="color" id="bg-color" value="#ffffff" class="color-input">
+    </div>
+
+    <!-- Reading Aids -->
+    <div class="section-label">Reading Aids</div>
+
+    <div class="toggle-row">
+      <label class="toggle-switch">
+        <input type="checkbox" id="toggle-bold">
+        <span class="track"></span>
+      </label>
+      <span class="toggle-label">Bold Beginnings</span>
+    </div>
+
+    <div class="toggle-row">
+      <label class="toggle-switch">
+        <input type="checkbox" id="toggle-emotion">
+        <span class="track"></span>
+      </label>
+      <span class="toggle-label">Emotion Colors</span>
+    </div>
+
+    <div class="emotion-colors" id="emotion-colors">
+      <div class="color-row">
+        <span>Positive</span>
+        <input type="color" id="emotion-positive-color" value="#27ae60">
+      </div>
+      <div class="color-row">
+        <span>Negative</span>
+        <input type="color" id="emotion-negative-color" value="#e74c3c">
+      </div>
+      <div class="color-row">
+        <span>Surprise</span>
+        <input type="color" id="emotion-surprise-color" value="#8e44ad">
+      </div>
+    </div>
+
+    <div class="toggle-row">
+      <label class="toggle-switch">
+        <input type="checkbox" id="toggle-gradient">
+        <span class="track"></span>
+      </label>
+      <span class="toggle-label">Row Shading</span>
+    </div>
+
+    <div class="toggle-row">
+      <label class="toggle-switch">
+        <input type="checkbox" id="toggle-logic">
+        <span class="track"></span>
+      </label>
+      <span class="toggle-label">Logic Words</span>
+    </div>
+
+    <div class="toggle-row">
+      <label class="toggle-switch">
+        <input type="checkbox" id="toggle-ruler">
+        <span class="track"></span>
+      </label>
+      <span class="toggle-label">Reading Ruler</span>
+    </div>
+
+    <div class="ruler-size" id="ruler-size-control">
+      <span class="sub-label">Window size</span>
+      <input type="range" id="ruler-size-slider" min="1" max="10" step="0.5" value="1.5" class="slider">
+      <span id="ruler-size-value" class="slider-value">1.5 lines</span>
+    </div>
+
+  </div>
+
+  <script src="panel.js"></script>
+</body>
+</html>
