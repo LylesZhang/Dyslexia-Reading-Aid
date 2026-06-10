@@ -51,35 +51,44 @@
   - `content_scripts` — 要自动注入到每个网页的 JS 和 CSS 文件
   - `side_panel` — 侧边栏的 HTML 文件路径
   - `action` — 点击 Chrome 工具栏插件图标时弹出的小窗口
-- [ ] 创建 `content/index.js`（Content Script 入口，注入页面）
+- [x] 创建 `content/index.js` — 注入任意网页，负责找正文、加标记、实时监听设置变更
+  - `findContentArea()` — 依次尝试 article / main 等选择器找正文
+  - `processWord()` — 给单词加 Bionic Reading / Emotion / Logic 标记
+  - `buildParagraphHTML()` — 把段落文本重建为带标记的 HTML
+  - `applyTransformations()` / `removeTransformations()` — 应用和撤销所有变换
+  - `setupRuler()` / `updateRuler()` — Reading Ruler 跟随鼠标
+  - `applyFocusMask()` / `clearFocusMask()` — Topic Focus 句子评分与半透明
+  - `chrome.storage.sync.get` — 启动时读取已保存的用户偏好
+  - `chrome.runtime.onMessage.addListener` — 监听 Side Panel 的实时设置变更
+- [x] 创建 `content/content.css` — 所有视觉效果的样式，前缀 `dra-` 防止与网页样式冲突
 - [ ] 创建 `background/index.js`（Service Worker，管理消息路由）
 - [ ] 创建 `panel/panel.html` + `panel.js`（Side Panel 设置界面）
 - [ ] 创建 `popup/popup.html` + `popup.js`（Toolbar 弹窗，快速开关）
 - [ ] 创建 `icons/` 目录，放置 16px / 48px / 128px 三个尺寸的图标
 
 #### 1.2 DOM 正文提取
-- [ ] 引入 `@mozilla/readability` 提取页面正文（排除导航、广告、页脚）
+- [x] `findContentArea()` 已内置在 `content/index.js`，依次尝试常见选择器，兜底用 `document.body`
 - [ ] 处理动态页面（SPA）：监听 DOM 变化，内容更新后重新提取
 - [ ] 测试：NYT、Wikipedia、Medium 三个典型页面提取效果
 
 #### 1.3 视觉辅助移植（从 demo app.js 移植）
-- [ ] Bionic Reading — `bionicReading.ts`（移植 `bionicN()` + `processWord()` 逻辑）
-- [ ] Row Shading — 按句子交替加 `row-even` / `row-odd` CSS class
-- [ ] Reading Ruler — `ruler.ts`（移植 `updateRuler()` + `setRulerVisible()`）
-- [ ] Topic Focus — `focusMask.ts`（移植 `applyFocusMask()` + `scoreSentence()`）
-- [ ] Logic Word 高亮 — 移植 `LOGIC_WORDS` set + `logic-word` CSS class
-- [ ] Sentence Labels 标签 — 移植 `renderOneSentence()` + `.sentence-tag` 样式
+- [x] Bionic Reading — `bionicN()` + `processWord()` 已移植至 `content/index.js`
+- [x] Row Shading — `dra-row-even` / `dra-row-odd` 已实现
+- [x] Reading Ruler — `setupRuler()` + `updateRuler()` 已实现
+- [x] Topic Focus — `applyFocusMask()` + `scoreSentence()` 已实现
+- [x] Logic Word 高亮 — `LOGIC_WORDS` + `dra-logic-word` 已实现
+- [ ] Sentence Labels 标签 — 待实现（Phase 2 接入 AI 后一起做）
 
 #### 1.4 新增 Dyslexia 排版控件
-- [ ] 字间距滑块（`word-spacing`：0 ~ 0.5em）
-- [ ] 字母间距滑块（`letter-spacing`：0 ~ 0.1em）
+- [x] 字间距（`word-spacing`）— 已在 `applyTransformations()` 中支持
+- [x] 字母间距（`letter-spacing`）— 已在 `applyTransformations()` 中支持
 - [ ] 字体选项加入 OpenDyslexic（引入 CDN 或本地字体文件）
 - [ ] 段落最大宽度控制（60ch ~ 80ch，防止过长行）
 
 #### 1.5 用户偏好持久化
-- [ ] 定义 `UserSettings` TypeScript 接口（统一所有状态字段）
-- [ ] 写入：设置变更时调用 `chrome.storage.sync.set()`
-- [ ] 读取：Content Script 和 Side Panel 启动时加载已保存偏好
+- [x] `DEFAULT_SETTINGS` 对象统一管理所有默认状态字段
+- [x] 读取：`chrome.storage.sync.get('draSettings')` 启动时加载
+- [ ] 写入：Side Panel 设置变更时调用 `chrome.storage.sync.set()`（在 panel.js 里实现）
 - [ ] 默认值：首次安装时写入合理默认配置
 
 ---
