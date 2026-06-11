@@ -63,6 +63,7 @@
   const originalHTML = new WeakMap();
 
   let contentArea = null;
+  let lastRulerY  = null;
 
   // ── Content area detection ─────────────────────────────────────────────
   // Tries common semantic selectors before falling back to <body>.
@@ -210,6 +211,7 @@
   // ── Reading Ruler ──────────────────────────────────────────────────────
 
   function updateRuler(e) {
+    lastRulerY = e.clientY;
     const halfH = Math.round(16 * 1.8 * settings.rulerWindowLines / 2);
     const topEl = document.getElementById('dra-ruler-top');
     const botEl = document.getElementById('dra-ruler-bottom');
@@ -231,6 +233,7 @@
       document.body.appendChild(el);
     });
     document.addEventListener('mousemove', updateRuler);
+    updateRuler({ clientY: lastRulerY ?? window.innerHeight / 2 });
   }
 
   function teardownRuler() {
@@ -297,6 +300,7 @@
 
   chrome.runtime.onMessage.addListener((msg) => {
     if (msg.type === 'SETTINGS_CHANGED') {
+      if (msg.payload.rulerActive === false) lastRulerY = null;
       settings = { ...settings, ...msg.payload };
       render();
     }
