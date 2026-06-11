@@ -188,6 +188,9 @@
     if (settings.typographyEnabled && settings.bgColor) {
       contentArea.style.background = settings.bgColor;
     }
+
+    if (settings.readingAidsEnabled && settings.rulerActive) setupRuler();
+    else teardownRuler();
   }
 
   function removeTransformations() {
@@ -201,6 +204,7 @@
     });
 
     contentArea.style.background = '';
+    teardownRuler();
   }
 
   // ── Reading Ruler ──────────────────────────────────────────────────────
@@ -280,8 +284,6 @@
       applyTransformations();
     }
 
-    if (settings.rulerActive) setupRuler();
-    else teardownRuler();
   }
 
   // ── Boot: load saved settings then render ──────────────────────────────
